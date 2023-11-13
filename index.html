@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			#controls {
+				font-family: 'Georgia', serif;
+				background-color: #f3eee7;
+				color: #4d4b4b;
+				margin: 20px;
+				display: flex;
+				flex-direction: column;
+				margin-left: 20px;
+				align-items: center;
+				text-align: center;
+			}
+			#controls h1 {
+				color: #5c4d3e;
+				margin-bottom: 20px;
+			}
+			
+			#coffee-container 
+			{
+				display: flex;
+				margin-left:12em;
+			}
+			
+			.coffee-item {
+				border: 1px solid #9e8a7d;
+				padding: 20px;
+				margin: 20px;
+				text-align: center;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+				background-color: #fff;
+				border-radius: 10px;
+				overflow: hidden;
+				transition: transform 0.3s ease-in-out;
+				max-width: calc(70%/3); /* regardless of the width, it would adjust */ 
+				width: calc(70%/3);
+			}
+			
+			.coffee-item:hover {
+				transform: scale(1.05);
+			}
+			.coffee-item img {
+				max-width: 100%;
+				height: auto;
+				margin-bottom: 20px;
+				border-radius: 5px;
+			}
+			.filter-buttons {
+				margin-bottom: 40px;
+				display: flex;
+				justify-content: center;
+			}
+			.filter-button {
+				padding: 10px;
+				margin: 5px;
+				cursor: pointer;
+				background-color: #5c4d3e;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				transition: background-color 0.3s ease-in-out;
+			}
+			.filter-button:hover {
+				background-color: #9e8a7d;
+			}
+		</style>
+		<script type="text/javascript" src="https://unpkg.com/isotope-layout@3.0.6/dist/isotope.pkgd.min.js"></script>
+		<title>Coffee Beans Type</title>
+	</head>
+	<body>
+		<div id="controls">
+			<h1>Coffee Beans Website</h1>
+			<!-- Filter buttons -->
+			<div class="filter-buttons">
+				<button class="filter-button" data-filter="*">All</button>
+				<button class="filter-button" data-filter=".arabica">Arabica</button>
+				<button class="filter-button" data-filter=".robusta">Robusta</button>
+				<button class="filter-button" data-filter=".liberica">Liberica</button>
+				<button class="filter-button" data-filter=".icatu">Icatu</button>
+				<button class="filter-button" data-filter=".tanzania">Tanzania</button>
+				<button class="filter-button" data-filter=".typica">Typica</button>
+			</div>
+		</div>
+		<!-- Coffee beans container -->
+		<div id="coffee-container">
+		<!-- Coffee beans items go here -->
+		</div>
+		<script>
+		// JSON data representing coffee beans
+		const coffeeData = [
+			{
+				name: "Arabica Coffee",
+				description: "Known for its mild flavor and aromatic qualities.",
+				image: "./image/arabica.jpeg",
+				category: "arabica"
+			},
+			{
+				name: "Robusta Coffee",
+				description: "Has a strong, harsh flavor with a grain-like overtone.",
+				image: "./image/robusta.jpeg",
+				category: "robusta"
+			},
+			{
+				name: "Liberica Coffee",
+				description: "Has a unique fruity flavor and is less common than Arabica and Robusta.",
+				image: "./image/liberica.jpeg",
+				category: "liberica"
+			},
+			{
+				name: "Icatu Coffee",
+				description: "Has gained recognition for its mild acidity and distinctive floral notes.",
+				image: "./image/itacu.jpg",
+				category: "icatu"
+			},
+			{
+				name: "Tanzania Coffee",
+				description: "Has a robust and intense flavor with pronounced acidity and a distinctive grain-like overtone, ",
+				image: "./image/tanzania.jpeg",
+				category: "tanzania"
+			},
+			{
+				name: "Typica Coffee",
+				description: "Has a uniquely fruity flavor profile that sets it apart from more common varieties.",
+				image: "./image/typica.png",
+				category: "typica"
+			}
+		];
+		// Function to create HTML elements for each coffee bean
+		function createCoffeeItem(item) {
+			const coffeeItem = document.createElement("div");
+			const titleElement = document.createElement("h2");
+			const descriptionElement = document.createElement("p");
+			const imageElement = document.createElement("img");
+			
+			coffeeItem.classList.add("coffee-item", item.category);
+			titleElement.textContent = item.name;
+			descriptionElement.textContent = item.description;	
+			imageElement.src = item.image;
+			imageElement.alt = item.name;
+			
+			coffeeItem.appendChild(titleElement);
+			coffeeItem.appendChild(imageElement);
+			coffeeItem.appendChild(descriptionElement);
+			
+			return coffeeItem;
+		}
+			// Populate the coffee container with coffee items
+			const coffeeContainer = document.getElementById("coffee-container");
+				coffeeData.forEach((item, index, itemArray) => {
+					const coffeeItem = createCoffeeItem(item);
+					coffeeContainer.appendChild(coffeeItem);
+				});
+			// Initialize Isotope
+			document.addEventListener("DOMContentLoaded", function () {
+				const iso = new Isotope("#coffee-container", {
+				itemSelector: ".coffee-item",
+				layoutMode: "fitRows"
+			});
+			// Function to filter items based on data-filter attribute
+			function filterItems(filterValue) {
+				iso.arrange({ filter: filterValue });
+			}
+			// Add event listeners to filter buttons
+			const filterButtons = document.querySelectorAll(".filter-button");
+			filterButtons.forEach(button => {
+				button.addEventListener("click", function () {
+					const filterValue = this.getAttribute("data-filter");
+					filterItems(filterValue);
+				});
+			});
+		});
+		</script>
+	</body>
+</html>
